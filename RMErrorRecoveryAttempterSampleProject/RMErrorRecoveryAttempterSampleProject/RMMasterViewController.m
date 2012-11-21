@@ -120,7 +120,7 @@
 	BOOL delete = [self _deleteItem:item error:&deleteError];
 	if (!delete) {
 		__weak RMMasterViewController *weakSelf = self;
-		[self presentError:deleteError completionHandler:^ (BOOL recovered) {
+		[self rm_presentError:deleteError completionHandler:^ (BOOL recovered) {
 			if (!recovered) {
 				// The user didn't choose a recovery path, abort the operation.
 				return;

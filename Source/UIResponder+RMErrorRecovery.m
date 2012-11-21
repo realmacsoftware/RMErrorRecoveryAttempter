@@ -59,7 +59,7 @@ static NSString *_RMAlertViewDelegateContext = @"_RMAlertViewDelegateContext";
 
 @implementation UIResponder (RMErrorRecovery)
 
-- (void)presentError:(NSError *)error completionHandler:(void (^)(BOOL recovered))completionHandler
+- (void)rm_presentError:(NSError *)error completionHandler:(void (^)(BOOL recovered))completionHandler
 {
 	_RMAlertViewDelegate *alertViewDelegate = [[_RMAlertViewDelegate alloc] init];
 	[alertViewDelegate setError:error];

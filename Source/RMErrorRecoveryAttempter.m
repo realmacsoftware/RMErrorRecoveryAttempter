@@ -80,13 +80,18 @@
 	return [_titles copy];
 }
 
+- (BOOL (^)(void))_recoveryHandlerAtIndex:(NSUInteger)idx
+{
+	return (BOOL (^)(void))[[self blocks] objectAtIndex:idx];
+}
+
 @end
 
 @implementation RMErrorRecoveryAttempter (RMFoundationDelegate)
 
 - (BOOL)attemptRecoveryFromError:(NSError *)error optionIndex:(NSUInteger)recoveryOptionIndex
 {
-	return ((BOOL (^)(NSError *))[[self blocks] objectAtIndex:recoveryOptionIndex])(error);
+	return [self _recoveryHandlerAtIndex:recoveryOptionIndex]();
 }
 
 - (void)attemptRecoveryFromError:(NSError *)error optionIndex:(NSUInteger)recoveryOptionIndex delegate:(id)delegate didRecoverSelector:(SEL)didRecoverSelector contextInfo:(void *)contextInfo
@@ -95,7 +100,7 @@
 		((void (*)(id, SEL, BOOL, void *))objc_msgSend)(delegate, didRecoverSelector, didRecover, contextInfo);
 	};
 	
-	BOOL didRecover = ((BOOL (^)(NSError *))[[self blocks] objectAtIndex:recoveryOptionIndex])(error);
+	BOOL didRecover = [self _recoveryHandlerAtIndex:recoveryOptionIndex]();
 	originalDidRecover(didRecover);
 }
 

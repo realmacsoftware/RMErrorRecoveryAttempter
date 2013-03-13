@@ -29,10 +29,14 @@
  */
 @interface UIResponder (RMErrorRecovery)
 
+#if NS_BLOCKS_AVAILABLE
+
 /*!
 	\brief
 	Present an alert from an error. An error that includes an `NSRecoveryAttempterErrorKey` object will include buttons with the `NSLocalizedRecoveryOptionsErrorKey` strings as titles.
  */
 - (void)rm_presentError:(NSError *)error completionHandler:(void (^)(BOOL recovered))completionHandler;
+
+#endif
 
 @end

@@ -29,6 +29,8 @@
  */
 @interface RMErrorRecoveryAttempter : NSObject
 
+#if NS_BLOCKS_AVAILABLE
+
 /*!
 	\brief
 	Build up the recovery options.
@@ -46,5 +48,7 @@
 	Extract the recovery options for use as `NSLocalizedRecoveryOptionsErrorKey`.
  */
 - (NSArray *)recoveryOptions;
+
+#endif
 
 @end

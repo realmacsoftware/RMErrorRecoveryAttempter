@@ -22,6 +22,15 @@
 //
 
 #import <UIKit/UIKit.h>
+/*!
+ \brief
+ Presented error completion method (which UIAlerViewDelegate's method has to be used for completionHandler)
+ */
+typedef enum : NSInteger {
+    RMErrorRecoveryPresentedErrorCompletionMethodClickedButton = 0,
+    RMErrorRecoveryPresentedErrorCompletionMethodWillDismiss = 1,
+    RMErrorRecoveryPresentedErrorCompletionMethodDidDismiss = 2,
+} RMErrorRecoveryPresentedErrorCompletionMethod;
 
 /*!
 	\brief
@@ -33,9 +42,15 @@
 
 /*!
 	\brief
-	Present an alert from an error. An error that includes an `NSRecoveryAttempterErrorKey` object will include buttons with the `NSLocalizedRecoveryOptionsErrorKey` strings as titles.
+	Present an alert from an error with `RMErrorRecoveryPresentedErrorCompletionMethodClickedButton` completion method. An error that includes an `NSRecoveryAttempterErrorKey` object will include buttons with the `NSLocalizedRecoveryOptionsErrorKey` strings as titles.
  */
 - (void)rm_presentError:(NSError *)error completionHandler:(void (^)(BOOL recovered))completionHandler;
+
+/*!
+ \brief
+ Present an alert from an error with specified completion method. An error that includes an `NSRecoveryAttempterErrorKey` object will include buttons with the `NSLocalizedRecoveryOptionsErrorKey` strings as titles.
+ */
+- (void)rm_presentError:(NSError *)error completionHandler:(void (^)(BOOL recovered))completionHandler completionMethod:(RMErrorRecoveryPresentedErrorCompletionMethod)competionMethod;
 
 #endif
 

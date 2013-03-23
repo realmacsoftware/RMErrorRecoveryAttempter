@@ -34,6 +34,10 @@ The sample project, RMErrorRecoveryAttempterSampleProject, is an iOS app where l
 The alert is presented using the `UIResponder+RMErrorRecovery` category. If the `recovered` parameter of the completion handler is `YES` then the user chose a recovery path and so the message to delete the item is resent.
 
 	- (void)rm_presentError:(NSError *)error completionHandler:(void (^)(BOOL recovered))completionHandler;
+	
+You can also specify which completion method should the UIAlertView use to call the completion handler:
+
+    - (void)rm_presentError:(NSError *)error completionHandler:(void (^)(BOOL recovered))completionHandler completionMethod:(RMErrorRecoveryPresentedErrorCompletionMethod)competionMethod;
 
 On OS X you can use either the following two AppKit methods to present the error.
 

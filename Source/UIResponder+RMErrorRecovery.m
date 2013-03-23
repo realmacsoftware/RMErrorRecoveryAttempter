@@ -39,6 +39,7 @@ static NSString *_RMAlertViewDelegateContext = @"_RMAlertViewDelegateContext";
 
 @property (strong, nonatomic) NSError *error;
 @property (copy, nonatomic) void (^completionHandler)(BOOL recovered);
+@property (assign, nonatomic) RMErrorRecoveryPresentedErrorCompletionMethod completionMethod;
 
 @end
 
@@ -46,11 +47,35 @@ static NSString *_RMAlertViewDelegateContext = @"_RMAlertViewDelegateContext";
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-	NSError *error = [self error];
-	BOOL recovered = [[error recoveryAttempter] attemptRecoveryFromError:error optionIndex:buttonIndex];
-	if ([self completionHandler] != nil) {
-		[self completionHandler](recovered);
-	}
+    if([self completionMethod] == RMErrorRecoveryPresentedErrorCompletionMethodClickedButton) {
+        NSError *error = [self error];
+        BOOL recovered = [[error recoveryAttempter] attemptRecoveryFromError:error optionIndex:buttonIndex];
+        if ([self completionHandler] != nil) {
+            [self completionHandler](recovered);
+        }
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if([self completionMethod] == RMErrorRecoveryPresentedErrorCompletionMethodDidDismiss) {
+        NSError *error = [self error];
+        BOOL recovered = [[error recoveryAttempter] attemptRecoveryFromError:error optionIndex:buttonIndex];
+        if ([self completionHandler] != nil) {
+            [self completionHandler](recovered);
+        }
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView willDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+    if([self completionMethod] == RMErrorRecoveryPresentedErrorCompletionMethodWillDismiss) {
+        NSError *error = [self error];
+        BOOL recovered = [[error recoveryAttempter] attemptRecoveryFromError:error optionIndex:buttonIndex];
+        if ([self completionHandler] != nil) {
+            [self completionHandler](recovered);
+        }
+    }
 }
 
 @end
@@ -59,9 +84,10 @@ static NSString *_RMAlertViewDelegateContext = @"_RMAlertViewDelegateContext";
 
 @implementation UIResponder (RMErrorRecovery)
 
-- (void)rm_presentError:(NSError *)error completionHandler:(void (^)(BOOL recovered))completionHandler
+- (void)rm_presentError:(NSError *)error completionHandler:(void (^)(BOOL recovered))completionHandler completionMethod:(RMErrorRecoveryPresentedErrorCompletionMethod)competionMethod
 {
 	_RMAlertViewDelegate *alertViewDelegate = [[_RMAlertViewDelegate alloc] init];
+    [alertViewDelegate setCompletionMethod:competionMethod];
 	[alertViewDelegate setError:error];
 	[alertViewDelegate setCompletionHandler:completionHandler];
 	
@@ -80,6 +106,11 @@ static NSString *_RMAlertViewDelegateContext = @"_RMAlertViewDelegateContext";
 	objc_setAssociatedObject(alertView, &_RMAlertViewDelegateContext, alertViewDelegate, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 	
 	[alertView show];
+}
+
+- (void)rm_presentError:(NSError *)error completionHandler:(void (^)(BOOL))completionHandler
+{
+    [self rm_presentError:error completionHandler:completionHandler completionMethod:RMErrorRecoveryPresentedErrorCompletionMethodClickedButton];
 }
 
 @end

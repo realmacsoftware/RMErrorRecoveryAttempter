@@ -71,7 +71,7 @@
 - (void)addCancelRecoveryOption
 {
 	[self addRecoveryOptionWithLocalizedTitle:NSLocalizedString(@"Cancel", @"RMErrorRecoveryAttempter cancel recovery option") recoveryBlock:^ BOOL (void) {
-		return NO;
+		return YES;
 	}];
 }
 

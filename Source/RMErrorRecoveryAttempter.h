@@ -39,7 +39,7 @@
 
 /*!
 	\brief
-	Adds a cancel recovery option that returns `NO` from the recovery block.
+	Adds a cancel recovery option that returns `YES` from the recovery block.
  */
 - (void)addCancelRecoveryOption;
 

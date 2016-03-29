@@ -7,7 +7,7 @@ Read the [Cocoa Error Handling and Recovery](http://www.realmacsoftware.com/blog
 ## Sample Project
 
 The sample project, RMErrorRecoveryAttempterSampleProject, is an iOS app where locked and unlocked items can be created. If you swipe-to-delete an item that is locked an error is created. The user info dictionary of this error contains an `RMErrorRecoveryAttempter` object which has two recovery options, each with a title and a block object. The titles of these recovery options are used to populate the buttons of an alert and upon tapping a button the corresponding block object is executed. The recovery options return `YES` or `NO` to inform the caller whether to resend the original message that failed.
-
+```objc
 	RMErrorRecoveryAttempter *errorRecoveryAttempter = [[RMErrorRecoveryAttempter alloc] init];
 	[errorRecoveryAttempter addRecoveryOptionWithLocalizedTitle:NSLocalizedString(@"Don\u2019t Unlock", @"RMMasterViewController delete locked item error don't unlock recovery option") recoveryBlock:^ BOOL (void) {
 		// Do not attempt to recover from the error. Return NO to inform the caller that they should not resend the message that failed.
@@ -30,15 +30,16 @@ The sample project, RMErrorRecoveryAttempterSampleProject, is an iOS app where l
 		NSLocalizedRecoveryOptionsErrorKey : [errorRecoveryAttempter recoveryOptions],
 	};
 	*errorRef = [NSError errorWithDomain:RMErrorRecoveryAttempterSampleProjectErrorDomain code:RMErrorRecoveryAttempterSampleProjectErrorCodeLockedItem userInfo:userInfo];
-
+```
 The alert is presented using the `UIResponder+RMErrorRecovery` category. If the `recovered` parameter of the completion handler is `YES` then the user chose a recovery path and so the message to delete the item is resent.
-
+```objc
 	- (void)rm_presentError:(NSError *)error completionHandler:(void (^)(BOOL recovered))completionHandler;
-
+```
 On OS X you can use either the following two AppKit methods to present the error.
-
+```objc
 	- (BOOL)presentError:(NSError *)error;
 	- (void)presentError:(NSError *)error modalForWindow:(NSWindow *)window delegate:(id)delegate didPresentSelector:(SEL)didPresentSelector contextInfo:(void *)contextInfo;
+```
 
 ## Requirements
 
